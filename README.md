@@ -1,4 +1,4 @@
-# Liveblocks Dev Server Action
+# Liveblocks dev server as a GitHub CI Action
 
 A GitHub Action that starts a [Liveblocks](https://liveblocks.io) dev server for
 integration testing. The server runs as a background process and is available to
