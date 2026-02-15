@@ -1,0 +1,24 @@
+name: "Liveblocks Dev Server"
+description: "Start a Liveblocks dev server for integration testing"
+branding:
+  icon: "server"
+  color: "purple"
+
+inputs:
+  port:
+    description: "Port to expose the dev server on"
+    required: false
+    default: "1153"
+  version:
+    description: "CLI version to install (npm version or 'latest')"
+    required: false
+    default: "latest"
+
+outputs:
+  url:
+    description: "URL of the running dev server"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  post-entrypoint: "cleanup.sh"
