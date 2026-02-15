@@ -34,16 +34,6 @@ jobs:
 | ----- | ----------------------------- |
 | `url` | URL of the running dev server |
 
-## Examples
-
-### Custom port
-
-```yaml
-- uses: liveblocks/dev-server@v1
-  with:
-    port: 8080
-```
-
 ## How it works
 
 1. Sets up [Bun](https://bun.sh) via `oven-sh/setup-bun`
