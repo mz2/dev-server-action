@@ -20,5 +20,5 @@ outputs:
 
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "docker://docker:cli"
   post-entrypoint: "cleanup.sh"
