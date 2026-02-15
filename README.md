@@ -16,9 +16,6 @@ jobs:
       - uses: liveblocks/dev-server@v1
         id: dev-server
 
-      - run: curl ${{ steps.dev-server.outputs.url }}/health
-        # => {"status":"ok"}
-
       - name: Run tests against the dev server
         run: npm test
         env:
@@ -43,11 +40,8 @@ jobs:
 
 ```yaml
 - uses: liveblocks/dev-server@v1
-  id: dev-server
   with:
     port: 8080
-
-- run: curl http://localhost:8080/health
 ```
 
 ## How it works
