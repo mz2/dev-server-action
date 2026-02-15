@@ -9,16 +9,29 @@ inputs:
     description: "Port to expose the dev server on"
     required: false
     default: "1153"
-  tag:
-    description: "Docker image tag to use (e.g. 'latest', '1.0.5', 'pr-3060')"
-    required: false
-    default: "latest"
 
 outputs:
   url:
     description: "URL of the running dev server"
+    value: http://localhost:${{ inputs.port }}
 
 runs:
-  using: "docker"
-  image: "docker://docker:cli"
-  post-entrypoint: "cleanup.sh"
+  using: "composite"
+  steps:
+    - uses: oven-sh/setup-bun@v2
+
+    - name: Start dev server
+      shell: bash
+      run: |
+        bunx liveblocks dev --host 0.0.0.0 --port ${{ inputs.port }} &
+
+        for i in $(seq 1 30); do
+          if curl -sf http://localhost:${{ inputs.port }}/health > /dev/null 2>&1; then
+            echo "Liveblocks dev server is ready at http://localhost:${{ inputs.port }}"
+            exit 0
+          fi
+          sleep 1
+        done
+
+        echo "::error::Liveblocks dev server failed to start within 30 seconds"
+        exit 1

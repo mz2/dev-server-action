@@ -1,8 +1,8 @@
 # Liveblocks Dev Server Action
 
 A GitHub Action that starts a [Liveblocks](https://liveblocks.io) dev server for
-integration testing. The server runs as a Docker container alongside your
-workflow and is automatically cleaned up when the job finishes.
+integration testing. The server runs as a background process and is available to
+all subsequent steps in the job.
 
 ## Quick start
 
@@ -27,10 +27,9 @@ jobs:
 
 ## Inputs
 
-| Name      | Description                       | Default  |
-| --------- | --------------------------------- | -------- |
-| `port`    | Port to expose the dev server on  | `1153`   |
-| `tag` | Image tag to use (`latest`, `1.0.3`, `pr-3060`, etc.) | `latest` |
+| Name   | Description                      | Default |
+| ------ | -------------------------------- | ------- |
+| `port` | Port to expose the dev server on | `1153`  |
 
 ## Outputs
 
@@ -51,29 +50,14 @@ jobs:
 - run: curl http://localhost:8080/health
 ```
 
-### Pin to a specific tag
-
-```yaml
-- uses: liveblocks/dev-server@v1
-  with:
-    tag: "1.0.5"
-```
-
-### Test a PR build of the dev server
-
-```yaml
-- uses: liveblocks/dev-server@v1
-  with:
-    tag: pr-3060
-```
-
 ## How it works
 
-1. Pulls the `ghcr.io/liveblocks/liveblocks/dev-server` Docker image
-2. Starts the dev server as a detached container
-3. Waits for the built-in health check to report healthy (up to 120s)
+1. Sets up [Bun](https://bun.sh) via `oven-sh/setup-bun`
+2. Runs `bunx liveblocks dev` as a background process
+3. Waits for the `/health` endpoint to respond (up to 30s)
 4. Outputs the server URL for subsequent steps
-5. Stops and removes the container when the job finishes (`post-entrypoint`)
+
+The server process is automatically cleaned up when the runner shuts down.
 
 ## License
 
