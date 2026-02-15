@@ -2,13 +2,13 @@
 set -e
 
 PORT="${INPUT_PORT:-1153}"
-VERSION="${INPUT_VERSION:-latest}"
-IMAGE="ghcr.io/liveblocks/liveblocks/dev-server:${VERSION}"
+TAG="${INPUT_TAG:-latest}"
+IMAGE="ghcr.io/liveblocks/liveblocks/dev-server:${TAG}"
 
 echo "Pulling ${IMAGE}..."
 docker pull "$IMAGE"
 
-echo "Starting Liveblocks dev server (version: ${VERSION}, port: ${PORT})..."
+echo "Starting Liveblocks dev server (tag: ${TAG}, port: ${PORT})..."
 docker run -d \
   --name liveblocks-dev-server \
   -p "${PORT}:${PORT}" \

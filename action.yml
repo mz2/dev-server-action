@@ -9,8 +9,8 @@ inputs:
     description: "Port to expose the dev server on"
     required: false
     default: "1153"
-  version:
-    description: "CLI version to install (npm version or 'latest')"
+  tag:
+    description: "Docker image tag to use (e.g. 'latest', '1.0.5', 'pr-3060')"
     required: false
     default: "latest"
 

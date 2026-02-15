@@ -30,7 +30,7 @@ jobs:
 | Name      | Description                       | Default  |
 | --------- | --------------------------------- | -------- |
 | `port`    | Port to expose the dev server on  | `1153`   |
-| `version` | Image tag to use (`latest`, `1.0.3`, `pr-3060`, etc.) | `latest` |
+| `tag` | Image tag to use (`latest`, `1.0.3`, `pr-3060`, etc.) | `latest` |
 
 ## Outputs
 
@@ -51,12 +51,12 @@ jobs:
 - run: curl http://localhost:8080/health
 ```
 
-### Pin to a specific version
+### Pin to a specific tag
 
 ```yaml
 - uses: liveblocks/dev-server@v1
   with:
-    version: "1.0.5"
+    tag: "1.0.5"
 ```
 
 ### Test a PR build of the dev server
@@ -64,7 +64,7 @@ jobs:
 ```yaml
 - uses: liveblocks/dev-server@v1
   with:
-    version: pr-3060
+    tag: pr-3060
 ```
 
 ## How it works
