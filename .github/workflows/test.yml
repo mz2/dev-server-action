@@ -1,0 +1,40 @@
+name: Test action
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./
+        id: dev-server
+
+      - name: Verify health endpoint
+        run: |
+          STATUS=$(curl -sf "${{ steps.dev-server.outputs.url }}/health")
+          echo "Health response: ${STATUS}"
+          echo "$STATUS" | grep -q '"ok"'
+
+      - name: Verify welcome page
+        run: curl -sf "${{ steps.dev-server.outputs.url }}/" > /dev/null
+
+  test-custom-port:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./
+        id: dev-server
+        with:
+          port: 8080
+
+      - name: Verify server on custom port
+        run: |
+          curl -sf http://localhost:8080/health
+          echo "${{ steps.dev-server.outputs.url }}" | grep -q "8080"
