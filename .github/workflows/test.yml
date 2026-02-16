@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       liveblocks:
-        image: ghcr.io/liveblocks/liveblocks/dev-server:latest
+        image: ghcr.io/liveblocks/liveblocks/cli:latest
         ports:
           - 1153:1153
     steps:
