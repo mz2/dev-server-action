@@ -49,6 +49,7 @@ jobs:
         image: ghcr.io/liveblocks/cli:latest
         ports:
           - 1153:1153
+        # CMD defaults to "dev", HOST defaults to 0.0.0.0 inside the image
     steps:
       - name: Verify health endpoint
         run: |
