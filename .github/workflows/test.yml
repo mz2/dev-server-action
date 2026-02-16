@@ -46,11 +46,14 @@ jobs:
     runs-on: ubuntu-latest
     services:
       liveblocks:
-        image: ghcr.io/liveblocks/cli:latest
+        image: ghcr.io/liveblocks/cli:sha-5fb5f4b
         ports:
           - 1153:1153
-        # CMD defaults to "dev", HOST defaults to 0.0.0.0 inside the image
     steps:
+      - name: Record start time
+        id: timing
+        run: echo "start=$(date +%s%3N)" >> "$GITHUB_OUTPUT"
+
       - name: Verify health endpoint
         run: |
           STATUS=$(curl -sf http://localhost:1153/health)
@@ -60,11 +63,18 @@ jobs:
       - name: Verify welcome page
         run: curl -sf http://localhost:1153/ > /dev/null
 
+      - name: Record done time
+        id: done
+        run: echo "done=$(date +%s%3N)" >> "$GITHUB_OUTPUT"
+
       - name: Report timing
         run: |
+          START=${{ steps.timing.outputs.start }}
+          DONE=${{ steps.done.outputs.done }}
+          ELAPSED=$(( DONE - START ))
           echo "### Service container (Docker)" >> "$GITHUB_STEP_SUMMARY"
-          echo "Service container startup time is included in job setup (not measurable from steps)." >> "$GITHUB_STEP_SUMMARY"
-          echo "Check the **Initialize containers** phase in the job log for the pull + start time." >> "$GITHUB_STEP_SUMMARY"
+          echo "Steps time: **${ELAPSED}ms** (excludes image pull + container start in job setup)" >> "$GITHUB_STEP_SUMMARY"
+          echo "Check the **Initialize containers** phase in the job log for the full startup time." >> "$GITHUB_STEP_SUMMARY"
 
   # --- Composite action with custom port ---
   test-custom-port:
